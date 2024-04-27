@@ -19,6 +19,7 @@ def ping(client: Elasticsearch) -> None:
 
 
 def index(client: Elasticsearch, df: pd.DataFrame) -> None:
+    df = df.sample(frac =1)
     docs = df.to_dict(orient="records")
     for d in tqdm(docs):
         try:
