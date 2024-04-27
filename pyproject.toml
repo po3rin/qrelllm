@@ -1,0 +1,34 @@
+[tool.poetry]
+name = "qrelllm"
+version = "0.1.0"
+description = ""
+authors = ["po3rin <abctail30@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+openai = "^1.5.0"
+luigi = "^3.4.0"
+gokart = "^1.2.5"
+google-cloud-bigquery = "^3.14.1"
+tqdm = "^4.66.1"
+eland = "^8.11.1"
+fugashi = "^1.3.0"
+ipadic = "^1.0.0"
+unidic-lite = "^1.0.8"
+elasticsearch = "^8.11.1"
+scikit-learn = "^1.3.2"
+numpy = "^1.26.2"
+vertexai = "^0.0.1"
+google-cloud-aiplatform = "^1.42.1"
+ranx = "^0.3.19"
+
+
+[tool.poetry.group.dev.dependencies]
+black = "^24.2.0"
+isort = "^5.13.2"
+ipykernel = "^6.29.4"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

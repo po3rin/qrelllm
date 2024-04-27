@@ -1,0 +1,8 @@
+index:
+  - name: docs-v1
+    mapping: mapping.json
+
+alias:
+  - name: docs
+    index:
+      - docs-v1

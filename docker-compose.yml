@@ -1,0 +1,16 @@
+version: '3'
+services:
+  elasticsearch:
+    build: .
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - xpack.ml.max_machine_memory_percent=80
+    volumes:
+      - ./:/usr/src/llm-dataset
+    entrypoint:
+      - bash
+      - /usr/src/llm-dataset/docker-entrypoint.sh
