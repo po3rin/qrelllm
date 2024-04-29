@@ -35,6 +35,33 @@ def index(client: Elasticsearch, df: pd.DataFrame) -> None:
             raise e
 
 
+def run_with_ngram(
+    client: Elasticsearch, index_name: str, df: pd.DataFrame
+) -> pd.DataFrame:
+    queries = df["query"].drop_duplicates().tolist()
+
+    results = []
+    for q in tqdm(queries):
+        result = client.search(
+            index=index_name,
+            body={
+                "_source": {
+                    "includes": ["doc_id", "query", "title", "score", "reason"]
+                },
+                "query": {
+                    "bool": {
+                        "should": {"match": {"title.ngram": q}},
+                        "filter": {"match": {"query": q}},
+                    }
+                },
+            },
+        )
+        results.extend(
+            [r["_source"] | {"score": r["_score"]} for r in result["hits"]["hits"]]
+        )
+
+    return pd.DataFrame(results)
+
 def run_with_kuromoji(
     client: Elasticsearch, index_name: str, df: pd.DataFrame
 ) -> pd.DataFrame:
@@ -113,8 +140,8 @@ def main():
 
     index(client, df)
 
-    run1_df = run_with_kuromoji(client, index_name, df)
-    run2_df = run_with_semantic(client, index_name, df)
+    run1_df = run_with_ngram(client, index_name, df)
+    run2_df = run_with_kuromoji(client, index_name, df)
 
     ndcg_compare_report(df, run1_df, run2_df)
 
