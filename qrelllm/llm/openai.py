@@ -3,7 +3,7 @@ import luigi
 from openai import OpenAI
 
 
-class GenerateTestCollectionWithOpenAI(gokart.TaskOnKart):
+class GenerateTestCollectionWithOpenAIBatch(gokart.TaskOnKart):
     """
     与えられたクエリに関連する記事タイトルと関連のない記事タイトルを生成するタスク
     """

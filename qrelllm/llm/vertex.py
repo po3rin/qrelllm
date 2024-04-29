@@ -4,7 +4,7 @@ import vertexai
 from vertexai.language_models import TextGenerationModel
 
 
-class GenerateTestCollectionWithVertexAI(gokart.TaskOnKart):
+class GenerateTestCollectionWithVertexAIBatch(gokart.TaskOnKart):
     """
     テストコレクションの作成
     """

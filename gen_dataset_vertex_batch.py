@@ -2,7 +2,7 @@ import os
 
 import gokart
 
-from qrelllm.llm.vertex import GenerateTestCollectionWithVertexAI
+from qrelllm.llm.vertex import GenerateTestCollectionWithVertexAIBatch
 from qrelllm.queries import LoadQueries
 from qrelllm.upload.gcs import UploadBatchForGCS
 
@@ -19,7 +19,7 @@ def main():
         bucket_name=bucket_name,
         destination_blob_name="prompt/prompts.jsonl",
     )
-    generate_search_dataset_task = GenerateTestCollectionWithVertexAI(
+    generate_search_dataset_task = GenerateTestCollectionWithVertexAIBatch(
         project=project,
         location=location,
         destination_uri_prefix=f"gs://{bucket_name}/result",
