@@ -10,7 +10,7 @@ def load_test_collection(filepath: str) -> pd.DataFrame:
     df = df.reset_index()
     df.rename(columns={"index": "doc_id"}, inplace=True)
     df["doc_id"] = df["doc_id"].astype(str)
-    return df[["doc_id", "query", "title", "score", "reason"]]
+    return df[["doc_id", "query", "title", "rel", "reason"]]
 
 
 def ping(client: Elasticsearch) -> None:
@@ -46,7 +46,7 @@ def run_with_ngram(
             index=index_name,
             body={
                 "_source": {
-                    "includes": ["doc_id", "query", "title", "score", "reason"]
+                    "includes": ["doc_id", "query", "title", "rel", "reason"]
                 },
                 "query": {
                     "bool": {
@@ -57,7 +57,7 @@ def run_with_ngram(
             },
         )
         results.extend(
-            [r["_source"] | {"score": r["_score"]} for r in result["hits"]["hits"]]
+            [r["_source"] | {"rel": r["_rel"]} for r in result["hits"]["hits"]]
         )
 
     return pd.DataFrame(results)
@@ -73,7 +73,7 @@ def run_with_kuromoji(
             index=index_name,
             body={
                 "_source": {
-                    "includes": ["doc_id", "query", "title", "score", "reason"]
+                    "includes": ["doc_id", "query", "title", "rel", "reason"]
                 },
                 "query": {
                     "bool": {
@@ -84,7 +84,7 @@ def run_with_kuromoji(
             },
         )
         results.extend(
-            [r["_source"] | {"score": r["_score"]} for r in result["hits"]["hits"]]
+            [r["_source"] | {"rel": r["_rel"]} for r in result["hits"]["hits"]]
         )
 
     return pd.DataFrame(results)
@@ -101,7 +101,7 @@ def run_with_semantic(
             index=index_name,
             body={
                 "_source": {
-                    "includes": ["doc_id", "query", "title", "score", "reason"]
+                    "includes": ["doc_id", "query", "title", "rel", "reason"]
                 },
                 "query": {
                     "bool": {
@@ -124,7 +124,7 @@ def run_with_semantic(
             },
         )
         results.extend(
-            [r["_source"] | {"score": r["_score"]} for r in result["hits"]["hits"]]
+            [r["_source"] | {"rel": r["_rel"]} for r in result["hits"]["hits"]]
         )
 
     return pd.DataFrame(results)

@@ -58,7 +58,7 @@
       "query": {
         "type": "keyword"
       },
-      "score": {
+      "rel": {
         "type": "float"
       }
     }

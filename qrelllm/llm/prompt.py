@@ -18,11 +18,11 @@ def gen_doc_rel_prompt(query: str) -> str:
 関連度0: いかなる理由に関してもクエリと全く関係していないタイトル
 例: {{"query": "子供の熱の治し方", "title": "カラオケの楽しみ方", reason: "全く関係がない"}}
 
-結果は、以下のようなJSON形式で提出してください。JSONのkeyはquery/title/score/reasonの4つにしてください。
+結果は、以下のようなJSON形式で提出してください。JSONのkeyはquery/title/rel/reasonの4つにしてください。
 [
-    {{"query": "クエリの内容", "title": "クエリと関連のある記事タイトル0", "score": 0, "reason": "理由0"}},
-    {{"query": "クエリの内容", "title": "クエリと関連のある記事タイトル1", "score": 1, "reason": "理由1"}},
-    {{"query": "クエリの内容", "title": "クエリと関連のある記事タイトル2", "score": 2, "reason": "理由2"}}
+    {{"query": "クエリの内容", "title": "クエリと関連のある記事タイトル0", "rel": 0, "reason": "理由0"}},
+    {{"query": "クエリの内容", "title": "クエリと関連のある記事タイトル1", "rel": 1, "reason": "理由1"}},
+    {{"query": "クエリの内容", "title": "クエリと関連のある記事タイトル2", "rel": 2, "reason": "理由2"}}
 ]
 """
     )
@@ -49,11 +49,11 @@ ${docs}
 関連度0: いかなる理由に関してもクエリと全く関係していないタイトル
 例: {{"query": "子供の熱の治し方", "title": "カラオケの楽しみ方", reason: "全く関係がない"}}
 
-結果は、以下のようなJSON形式で提出してください。JSONのkeyはquery/title/score/reasonの4つにしてください。
+結果は、以下のようなJSON形式で提出してください。JSONのkeyはquery/title/rel/reasonの4つにしてください。
 [
-    {{"query": "クエリの内容", "title": "記事タイトル0", "score": 0, "reason": "理由0"}},
-    {{"query": "クエリの内容", "title": "記事タイトル1", "score": 1, "reason": "理由1"}},
-    {{"query": "クエリの内容", "title": "記事タイトル2", "score": 2, "reason": "理由2"}}
+    {{"query": "クエリの内容", "title": "記事タイトル0", "rel": 0, "reason": "理由0"}},
+    {{"query": "クエリの内容", "title": "記事タイトル1", "rel": 1, "reason": "理由1"}},
+    {{"query": "クエリの内容", "title": "記事タイトル2", "rel": 2, "reason": "理由2"}}
 ]
 """
     )

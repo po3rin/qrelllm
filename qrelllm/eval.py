@@ -11,14 +11,14 @@ def ndcg_compare_report(
         df=qrels_df,
         q_id_col="query",
         doc_id_col="doc_id",
-        score_col="score",
+        rel_col="rel",
     )
 
     runs = [Run.from_df(
         df=df,
         q_id_col="query",
         doc_id_col="doc_id",
-        score_col="score",
+        rel_col="rel",
     ) for df in list(args)]
 
     report = compare(qrels=qrels, runs=runs, metrics=["ndcg@10"], max_p=0.05)
@@ -31,8 +31,8 @@ class CohenKappa(gokart.TaskOnKart):
     testcollection_b = gokart.TaskInstanceParameter()
 
     def run(self):
-        a_df = self.load_data_frame('testcollection_a', required_columns={'query', 'title', 'score'})
-        b_df = self.load_data_frame('testcollection_b', required_columns={'query', 'title', 'score'})
+        a_df = self.load_data_frame('testcollection_a', required_columns={'query', 'title', 'rel'})
+        b_df = self.load_data_frame('testcollection_b', required_columns={'query', 'title', 'rel'})
 
         a_df.sort_values(['query', 'title'], inplace=True)
         b_df.sort_values(['query', 'title'], inplace=True)
@@ -43,8 +43,8 @@ class CohenKappa(gokart.TaskOnKart):
         b_df = b_df[b_df['query'].isin(a_df['query'])]
         b_df = b_df[b_df['title'].isin(a_df['title'])]
 
-        rels_a = a_df['score'].to_list()
-        rels_b = a_df['score'].to_list()
+        rels_a = a_df['rel'].to_list()
+        rels_b = a_df['rel'].to_list()
 
         if len(rels_a) != len(rels_b):
             raise ValueError('unmatched length')
