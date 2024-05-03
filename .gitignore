@@ -6,3 +6,5 @@ __pycache__/
 download.py
 resources
 .DS_Store
+*/load_titles.ipynb
+*/**/load_titles.py
