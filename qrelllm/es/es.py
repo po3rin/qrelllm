@@ -1,16 +1,6 @@
-import pandas as pd
 from elasticsearch import Elasticsearch
+import pandas as pd
 from tqdm import tqdm
-
-from qrelllm.eval import ndcg_compare_report
-
-
-def load_test_collection(filepath: str) -> pd.DataFrame:
-    df = pd.read_csv(filepath)
-    df = df.reset_index()
-    df.rename(columns={"index": "doc_id"}, inplace=True)
-    df["doc_id"] = df["doc_id"].astype(str)
-    return df[["doc_id", "query", "title", "rel", "reason"]]
 
 
 def ping(client: Elasticsearch) -> None:
@@ -19,7 +9,7 @@ def ping(client: Elasticsearch) -> None:
 
 
 def index(client: Elasticsearch, df: pd.DataFrame) -> None:
-    df = df.sample(frac =1)
+    df = df.sample(frac=1)
     docs = df.to_dict(orient="records")
     for d in tqdm(docs):
         try:
@@ -45,9 +35,7 @@ def run_with_ngram(
         result = client.search(
             index=index_name,
             body={
-                "_source": {
-                    "includes": ["doc_id", "query", "title", "rel", "reason"]
-                },
+                "_source": {"includes": ["doc_id", "query", "title", "rel", "reason"]},
                 "query": {
                     "bool": {
                         "should": {"match": {"title.ngram": q}},
@@ -62,6 +50,7 @@ def run_with_ngram(
 
     return pd.DataFrame(results)
 
+
 def run_with_kuromoji(
     client: Elasticsearch, index_name: str, df: pd.DataFrame
 ) -> pd.DataFrame:
@@ -72,9 +61,7 @@ def run_with_kuromoji(
         result = client.search(
             index=index_name,
             body={
-                "_source": {
-                    "includes": ["doc_id", "query", "title", "rel", "reason"]
-                },
+                "_source": {"includes": ["doc_id", "query", "title", "rel", "reason"]},
                 "query": {
                     "bool": {
                         "should": {"match": {"title": q}},
@@ -100,9 +87,7 @@ def run_with_semantic(
         result = client.search(
             index=index_name,
             body={
-                "_source": {
-                    "includes": ["doc_id", "query", "title", "rel", "reason"]
-                },
+                "_source": {"includes": ["doc_id", "query", "title", "rel", "reason"]},
                 "query": {
                     "bool": {
                         "should": {"match": {"title": q}},
@@ -128,23 +113,3 @@ def run_with_semantic(
         )
 
     return pd.DataFrame(results)
-
-
-def main():
-    index_name = "docs"
-    client = Elasticsearch(hosts=["http://localhost:9200"])
-
-    ping(client)
-
-    df = load_test_collection("data/dataset_vertex.csv")
-
-    index(client, df)
-
-    run1_df = run_with_ngram(client, index_name, df)
-    run2_df = run_with_kuromoji(client, index_name, df)
-
-    ndcg_compare_report(df, run1_df, run2_df)
-
-
-if __name__ == "__main__":
-    main()

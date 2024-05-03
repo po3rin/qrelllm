@@ -3,7 +3,7 @@ from string import Template
 
 def gen_doc_rel_prompt(query: str) -> str:
     t = Template(
-"""
+        """
 「${query}」という医療系の検索クエリに関係のある記事タイトルと関係のない記事タイトルを10件作成し、
 クエリとの関連度を0~2の3段階で付与してください。関連度は0,1,2全て満遍なく出現するようにしてください。
 関連度の判断基準は下記になります。
@@ -31,7 +31,7 @@ def gen_doc_rel_prompt(query: str) -> str:
 
 def gen_rel_prompt(query: str, docs: list[str]) -> str:
     t = Template(
-"""
+        """
 「${query}」という医療系の検索クエリに対して、下記で挙げた記事タイトルとの関連度を0~2の3段階で付与してください。関連度は0,1,2全て満遍なく出現するようにしてください。
 
 # 記事タイトルのリスト
