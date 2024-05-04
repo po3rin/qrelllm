@@ -39,23 +39,25 @@ class CohenKappa(gokart.TaskOnKart):
             "testcollection_b", required_columns={"query", "title", "rel"}
         )
 
-        a_df.sort_values(["query", "title"], inplace=True)
-        b_df.sort_values(["query", "title"], inplace=True)
-
         # queryとtitleが二つのデータフレームで重複しているものに絞る
-        a_df = a_df[a_df["query"].isin(b_df["query"])]
-        a_df = a_df[a_df["title"].isin(b_df["title"])]
-        b_df = b_df[b_df["query"].isin(a_df["query"])]
-        b_df = b_df[b_df["title"].isin(a_df["title"])]
+        a_df = a_df[a_df["query"].isin(
+            b_df["query"]) & a_df["title"].isin(b_df["title"]
+        )]
+        b_df = b_df[b_df["query"].isin(
+            a_df["query"]) & b_df["title"].isin(a_df["title"]
+        )]
 
-        rels_a = a_df["rel"].to_list()
-        rels_b = a_df["rel"].to_list()
+        df = pd.merge(a_df, b_df, on=['query', 'title'], how='inner')
+        rels_a = df['rel_x'].astype(int).tolist()
+        rels_b = df['rel_y'].astype(int).tolist()
 
         if len(rels_a) != len(rels_b):
-            raise ValueError("unmatched length")
+            raise ValueError(
+                f"unmatched length. a: {len(rels_a)}, b: {len(rels_b)}"
+            )
 
         if len(rels_a) == 0:
             raise ValueError("length: 0")
 
-        result = cohen_kappa_score(rels_a, rels_b)
-        self.dump(result)
+        result = cohen_kappa_score(rels_a, rels_b, weights='quadratic')
+        self.dump({'result': result})
