@@ -1,14 +1,15 @@
-import gokart
-import luigi
 import json
 import random
+
+import gokart
+import luigi
+import pandas as pd
 import vertexai
 from tqdm import tqdm
-import pandas as pd
 from vertexai.language_models import TextGenerationModel
 
-from qrelllm.llm.prompt import gen_doc_rel_prompt
 from qrelllm.format import clean_json
+from qrelllm.llm.prompt import gen_doc_rel_prompt
 
 
 class GenerateTestCollectionWithVertexAIBatch(gokart.TaskOnKart):

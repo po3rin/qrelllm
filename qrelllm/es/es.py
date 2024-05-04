@@ -1,5 +1,5 @@
-from elasticsearch import Elasticsearch
 import pandas as pd
+from elasticsearch import Elasticsearch
 from tqdm import tqdm
 
 
