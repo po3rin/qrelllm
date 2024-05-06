@@ -17,7 +17,7 @@ def index(client: Elasticsearch, df: pd.DataFrame) -> None:
                 index="docs",
                 body=d,
                 id=d["doc_id"],
-                pipeline="japanese-text-embeddings",
+                # pipeline="japanese-text-embeddings",
             )
         except Exception as e:
             print(e)
@@ -45,7 +45,7 @@ def run_with_ngram(
             },
         )
         results.extend(
-            [r["_source"] | {"rel": r["_rel"]} for r in result["hits"]["hits"]]
+            [r["_source"] | {"rel": r["_score"]} for r in result["hits"]["hits"]]
         )
 
     return pd.DataFrame(results)
@@ -71,7 +71,7 @@ def run_with_kuromoji(
             },
         )
         results.extend(
-            [r["_source"] | {"rel": r["_rel"]} for r in result["hits"]["hits"]]
+            [r["_source"] | {"rel": r["_score"]} for r in result["hits"]["hits"]]
         )
 
     return pd.DataFrame(results)
