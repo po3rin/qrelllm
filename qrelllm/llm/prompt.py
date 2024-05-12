@@ -20,9 +20,9 @@ def gen_doc_rel_prompt(query: str) -> str:
 
 結果は、以下のようなJSON形式で提出してください。JSONのkeyはquery/title/rel/reasonの4つにしてください。
 [
-    {{"query": "クエリの内容", "title": "クエリと関連のある記事タイトル0", "rel": 0, "reason": "理由0"}},
-    {{"query": "クエリの内容", "title": "クエリと関連のある記事タイトル1", "rel": 1, "reason": "理由1"}},
-    {{"query": "クエリの内容", "title": "クエリと関連のある記事タイトル2", "rel": 2, "reason": "理由2"}}
+    {{"query": "クエリ1", "title": "クエリと関連のある記事タイトル0", "rel": 0, "reason": "理由0"}},
+    {{"query": "クエリ2", "title": "クエリと関連のある記事タイトル1", "rel": 1, "reason": "理由1"}},
+    {{"query": "クエリ3", "title": "クエリと関連のある記事タイトル2", "rel": 2, "reason": "理由2"}}
 ]
 """
     )

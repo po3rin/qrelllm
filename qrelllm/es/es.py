@@ -17,7 +17,7 @@ def index(client: Elasticsearch, df: pd.DataFrame) -> None:
                 index="docs",
                 body=d,
                 id=d["doc_id"],
-                pipeline="japanese-text-embeddings",
+                # pipeline="japanese-text-embeddings",
             )
         except Exception as e:
             print(e)

@@ -9,7 +9,7 @@ def ndcg_compare_report(qrels_df: pd.DataFrame, *args: pd.DataFrame):
         df=qrels_df,
         q_id_col="query",
         doc_id_col="doc_id",
-        rel_col="rel",
+        score_col="rel",
     )
 
     runs = [
@@ -17,14 +17,19 @@ def ndcg_compare_report(qrels_df: pd.DataFrame, *args: pd.DataFrame):
             df=df,
             q_id_col="query",
             doc_id_col="doc_id",
-            rel_col="rel",
+            score_col="rel",
         )
         for df in list(args)
     ]
 
-    report = compare(qrels=qrels, runs=runs, metrics=["ndcg@10"], max_p=0.05)
-
-    print(report)
+    report = compare(
+        qrels=qrels,
+        runs=runs,
+        metrics=["ndcg@10"],
+        max_p=0.05,
+        make_comparable=True
+    )
+    return report
 
 
 class CohenKappa(gokart.TaskOnKart):
