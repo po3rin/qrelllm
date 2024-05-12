@@ -25,8 +25,8 @@ def index(client: Elasticsearch, df: pd.DataFrame) -> None:
             raise e
 
 
-def run_with_ngram(
-    client: Elasticsearch, index_name: str, df: pd.DataFrame
+def run(
+    client: Elasticsearch, index_name: str, df: pd.DataFrame, target_field: str
 ) -> pd.DataFrame:
     queries = df["query"].drop_duplicates().tolist()
 
@@ -38,40 +38,14 @@ def run_with_ngram(
                 "_source": {"includes": ["doc_id", "query", "title", "rel", "reason"]},
                 "query": {
                     "bool": {
-                        "should": {"match": {"title.ngram": q}},
+                        "should": {"match": {target_field: q}},
                         "filter": {"match": {"query": q}},
                     }
                 },
             },
         )
         results.extend(
-            [r["_source"] | {"rel": r["_rel"]} for r in result["hits"]["hits"]]
-        )
-
-    return pd.DataFrame(results)
-
-
-def run_with_kuromoji(
-    client: Elasticsearch, index_name: str, df: pd.DataFrame
-) -> pd.DataFrame:
-    queries = df["query"].drop_duplicates().tolist()
-
-    results = []
-    for q in tqdm(queries):
-        result = client.search(
-            index=index_name,
-            body={
-                "_source": {"includes": ["doc_id", "query", "title", "rel", "reason"]},
-                "query": {
-                    "bool": {
-                        "should": {"match": {"title": q}},
-                        "filter": {"match": {"query": q}},
-                    }
-                },
-            },
-        )
-        results.extend(
-            [r["_source"] | {"rel": r["_rel"]} for r in result["hits"]["hits"]]
+            [r["_source"] | {"rel": r["_score"]} for r in result["hits"]["hits"]]
         )
 
     return pd.DataFrame(results)
